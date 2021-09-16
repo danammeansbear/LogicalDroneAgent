@@ -1,6 +1,6 @@
 Logical drone agent project for use of drones in hunting enviorments with AR/VR 
 
-<img src="jarvis1.jpg"/>
+
 
 ### Requirements:
 
@@ -81,7 +81,7 @@ sudo apt-get update && sudo apt-get install espeak
   <li><h2>Coding for kids</h2></li>
   <li><h2> Opens youtube in browser with desired search query results </h2></li>
   
-   <li><h2> Jarvis, Can you send email to Gaurav?</h2></li>
+   <li><h2> Jarvis, Can you send email to adam dabdoub?</h2></li>
   <li><h2>What I say sir, Sir</h2></li>
   <li><h2> Email is sent successfully, Sir</h2></li>
   
