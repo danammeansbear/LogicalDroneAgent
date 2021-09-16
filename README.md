@@ -66,15 +66,6 @@ sudo apt-get update && sudo apt-get install espeak
   <tr>
     <td><img src="images/Screenshot%20(138).png"/></td>
 
-</tr>
-<tr>
-<td><img src="images/email.jpg"/></td>
-
-<td><img src="images/location.png"/></td>
-</tr>
-<td><img src="images/pytube.png"/></td>
-</tr>
-</table>
 
 ## Some Sneak peeks:
 
@@ -92,7 +83,6 @@ sudo apt-get update && sudo apt-get install espeak
   
    <li><h2> Jarvis, Can you send email to Gaurav?</h2></li>
   <li><h2>What I say sir, Sir</h2></li>
-   <li><h2>Gaurav is a good boy</h2></li>
   <li><h2> Email is sent successfully, Sir</h2></li>
   
   # And so on....
@@ -101,7 +91,7 @@ sudo apt-get update && sudo apt-get install espeak
 
 ## Contribution:
 
-A lot can be done with this project. Core AI chatbot like functionality can be added. More python scripts can be associated. Pull requests for any such changes are accepted. Feel free to fork this project and make your own changes too.
+Thank you for looking at my project, it is still a work in progress. I am hoping this software can be used with law enforcement and other agencies to create AR/VR and voice controlled drones for the aid in rescue or for our troops as an autonomous hunter. 
 # LogicalDroneAgent
 
 # LogicalDroneAgent
