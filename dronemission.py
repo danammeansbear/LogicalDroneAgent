@@ -23,7 +23,15 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 context = zmq.Context()
 socket = context.socket(zmq.PUB)
-socket.bind("tcp://*:12345")
+try:
+    socket.bind("tcp://*:12346")
+except zmq.error.ZMQError:
+    print ("socket already in use, restarting")
+    socket.close()
+    context.destroy()
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:12346")
 
 def speak(audio):
     engine.say(audio)
@@ -217,13 +225,54 @@ def mission():
     # Demonstrates getting and setting the command number 
     # Uses distance_to_current_waypoint(), a convenience function for finding the 
     #   distance to the next waypoint.
-    
+    #Distance Calculator 
+
+    #fuck I hope lol
+    #would like to use gimble angle to try and get the distance...
+    #consider sidea as the Altitude of the drone
+    sidea = float(vehicle.location.global_relative_frame.alt)
+    #sideb is the known distance if at all
+    #sideb = float(input("Gimble angle : "))
+    #sidec is basically the ray trace distnace from drone to object
+
+
+    lat = int(vehicle.location.global_relative_frame.lat);
+    long = int(vehicle.location.global_relative_frame.lon);
+    alt = int(vehicle.location.global_relative_frame.alt);
+
+    #not the best way to do this
+    #calculate the cos of distance of drone to the object
+    #given the drones altitude or sidea
+    cameraObjectDistance = sidea // (math.cos(sidea));
+    #calculate distance from object
+    gimbleAngle = 60; 
+    objectDistance = math.sqrt((pow(cameraObjectDistance,2)) - (pow(sidea,2)));
+    distanceTrue = (alt * math.sin(gimbleAngle))/(math.sin(alt));
+    #vehicle.location.global_relative_frame.alt) + " " + str(vehicle.location.global_relative_frame.lat) + " " + str(vehicle.location.global_relative_frame.lon
+    targetLocation = (lat + objectDistance,long,alt - alt + 2);
+    print("Drone ray trace distance: " + str(cameraObjectDistance));
+    print("object Distance: " + str(objectDistance));
+    print("target location:" + str(targetLocation));
+    print("distance True :" + str(distanceTrue));
+
     while True:
         nextwaypoint=vehicle.commands.next
         print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
-        message = str(vehicle.location.global_relative_frame.alt) + " " + str(vehicle.location.global_relative_frame.lat) + " " + str(vehicle.location.global_relative_frame.lon)
-        socket.send_string(message)
+        #message = str(vehicle.location.global_relative_frame.alt) + " " + str(vehicle.location.global_relative_frame.lat) + " " + str(vehicle.location.global_relative_frame.lon + " " + str(x + b) + " "+ str(y) + " " + str(z - z + 2))
+        #socket.send_string(message)
+        LockedTargetLocation = str(lat + distanceTrue) + " " + str(long) + " " + str(alt - alt + 2)
+        message = str(vehicle.location.global_relative_frame.alt) + " " + str(vehicle.location.global_relative_frame.lat) + " " + str(vehicle.location.global_relative_frame.lon) + " " + LockedTargetLocation
         print(message)
+        print("Drone ray trace distance: " + str(cameraObjectDistance))
+        print("Target Distance: " + str(objectDistance))
+        print(targetLocation)
+        #LockedTargetLocation = str(x + b) + " " + str(y) + " " + str(z - z + 2)
+        socket.send_string(LockedTargetLocation)
+        socket.send_string(message)
+        socket.send_string(objectDistance)
+        socket.send_string(targetLocation)
+        socket.send_string(distanceTrue)
+        print(LockedTargetLocation)
         time.sleep(1)
         if nextwaypoint==3: #Skip to next waypoint
             print('Skipping to Waypoint 5 when reach waypoint 3')
@@ -240,6 +289,7 @@ def mission():
     #Close vehicle object before exiting script
     print("Close vehicle object")
     vehicle.close()
+    socket.close()
     
     # Shut down simulator if it was started.
     if sitl is not None:
